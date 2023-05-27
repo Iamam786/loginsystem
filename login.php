@@ -9,20 +9,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql  = "Select * from users where username='$username' AND password='$password'";
+    // $sql  = "Select * from users where username='$username' AND password='$password'";
+    $sql  = "Select * from users where username='$username'";
 
     $result = mysqli_query($conn, $sql);
     $num = mysqli_num_rows($result);
     // echo $num;
     if ($num == 1) {
-        $login = true;
-        // echo "Login Successfully";
-        session_start();
-        $_SESSION['loggedin'] = true;
-        // $_SESSION['loggedin'] = false;
+        while ($row = mysqli_fetch_assoc($result)) {
+            if (password_verify($password, $row['password'])) {
 
-        $_SESSION['username'] = $username;
-        header("location: welcome.php");
+
+                $login = true;
+                session_start();
+                $_SESSION['loggedin'] = true;
+                $_SESSION['username'] = $username;
+                header("location: welcome.php");
+            } else {
+                $showError = "Invalid Credentials";
+            }
+        }
     } else {
         $showError = "Invalid Credentials";
     }
