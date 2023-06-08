@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sql = "INSERT INTO `users` ( `username`, `password`, `dt`) VALUES ( '$username', '$hash', current_timestamp())";
             $result = mysqli_query($conn, $sql);
 
-
+            header("location: login.php");
             if ($result) {
                 $showAlert = true;
             }
